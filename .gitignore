@@ -1,0 +1,6 @@
+build/
+kernel/src/
+kernel/out/
+*.o
+*.a
+__pycache__/

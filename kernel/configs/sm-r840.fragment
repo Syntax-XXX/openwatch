@@ -1,0 +1,35 @@
+# SM-R840 (Galaxy Watch3, Exynos 9110) – Konfigurationsfragment auf Basis von erd9110_defconfig (Googles Wear-Zweig, 4.19.279).
+# NUR Einstellungen, die wir bewusst setzen. Alles, wofür im Baum kein Treiber liegt (WLAN bcmdhd, Bluetooth, GPS, Sensorhub, Haptik),
+# bleibt unverändert und ist in docs/device-support-matrix.md als "nicht vorhanden" geführt.
+CONFIG_LOCALVERSION="-openwatch-r840"
+# 1 GB RAM: komprimierter Swap im RAM, kleine CMA-Reserve
+CONFIG_SWAP=y
+CONFIG_ZSMALLOC=y
+CONFIG_ZRAM=y
+CONFIG_CMA_SIZE_MBYTES=16
+# Start: initramfs als Wurzel, devtmpfs/tmpfs für den Userspace
+CONFIG_BLK_DEV_INITRD=y
+CONFIG_DEVTMPFS=y
+CONFIG_DEVTMPFS_MOUNT=y
+CONFIG_TMPFS=y
+CONFIG_RD_GZIP=y
+CONFIG_RD_LZ4=y
+# Eingabe + Anzeige für X11 (Framebuffer + evdev; Touch-Treiber ZTM620 ist in der Basis aktiv)
+CONFIG_INPUT_EVDEV=y
+CONFIG_INPUT_UINPUT=y
+CONFIG_INPUT_TOUCHSCREEN=y
+CONFIG_TOUCHSCREEN_ZXT_ZTM620=y
+CONFIG_FB=y
+# USB-Debugging über Gadget: serielle Konsole und Netzwerk (ACM/ECM), sobald ein Gerät bootet
+CONFIG_USB_GADGET=y
+CONFIG_USB_CONFIGFS=y
+CONFIG_USB_CONFIGFS_ACM=y
+CONFIG_USB_CONFIGFS_ECM=y
+# Storage: Samsung-eMMC über DesignWare-MMC, Dateisysteme für Systempartition
+CONFIG_MMC_DW=y
+CONFIG_MMC_DW_EXYNOS=y
+CONFIG_EXT4_FS=y
+CONFIG_F2FS_FS=y
+# Weniger Ballast fürs erste Bauen und für den knappen RAM
+# CONFIG_DEBUG_INFO is not set
+# CONFIG_MODULE_SIG is not set

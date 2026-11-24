@@ -1,0 +1,13 @@
+project('openwatch', 'c', version: '0.1.0', default_options: ['c_std=gnu11', 'warning_level=2', 'buildtype=release'])
+m = meson.get_compiler('c').find_library('m')
+x11 = dependency('x11')
+xext = dependency('xext')
+cairo = dependency('cairo')
+cairo_x = dependency('cairo-xlib')
+
+subdir('window-manager')
+subdir('widgets')
+subdir('apps')
+subdir('shell')
+subdir('system')
+subdir('tests')
