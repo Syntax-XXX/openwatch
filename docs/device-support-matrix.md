@@ -37,8 +37,8 @@ Hardware laut Auftrag: Exynos 9110 (2× Cortex-A53), 1 GB RAM, 360×360 AMOLED, 
 
 Die fünf fett markierten Gruppen stammen im R800-Projekt aus **Samsungs Tizen-Quellen für die R800** und sind im Googles Basis-Baum nicht enthalten.
 Sie werden **nicht nachgebaut oder erfunden**. Die zugehörigen Optionen bleiben aus. Samsungs Open-Source-Paket für die R840
-(`SM-R845U_Opensource.zip`, das Modelle R840/R850/R845/R855 abdeckt) könnte diese Treiber und einen passenden Device Tree enthalten –
-das ist **noch nicht ausgewertet**.
+(`SM-R845U_Opensource.zip`) ist inzwischen beschafft und enthält Samsungs **Linux 4.9.59** mit vielen echten Device Trees (siehe
+`samsung-open-source-paket.md`). Welches Board die R840 ist, ist **nicht belegt**; die Treiber darin sind **noch nicht ausgewertet**.
 
 ## Der Teil, der wirklich emuliert ist
 

@@ -49,7 +49,7 @@ Bootloader oder Werksdaten.
 | # | Blocker | Folge |
 |---|---|---|
 | 1 | **Kein verifizierter Rückweg** für die R840 | alle Hardware-Experimente gesperrt |
-| 2 | **Kein SM-R840-Device-Tree.** Der Kernel-Baum enthält nur die Referenzplatine ERD9110 (`exynos9110-erd9110.dts`); das R11-Board aus `Makefile` hat keine DTS-Datei im Zweig. R800-DT (`galileo-large-bt`) ist ein anderes Gerät | kein bootfähiger DTB; Kernel nur als Build-Test |
+| 2 | **Kein belegter SM-R840-Device-Tree.** (Seit 24.11. liegt Samsungs Open-Source-Paket mit vielen echten DTS vor – welches Board die R840 ist, steht darin nicht, siehe `samsung-open-source-paket.md`.) Der Kernel-Baum enthält nur die Referenzplatine ERD9110 (`exynos9110-erd9110.dts`); das R11-Board aus `Makefile` hat keine DTS-Datei im Zweig. R800-DT (`galileo-large-bt`) ist ein anderes Gerät | kein bootfähiger DTB; Kernel nur als Build-Test |
 | 3 | **Bootloader-Verhalten** bei fremdem, unsigniertem Kernel unbekannt | nicht einschätzbar; wird nicht „ausprobiert“ |
 | 4 | Partitionslayout, Samsung-Container-Format und Signatur der R840 nicht belegt | kein Abbild baubar |
 | 5 | Treiber für WLAN (Broadcom), Bluetooth, GPS/Sensorhub, Haptik, Drehkranz fehlen im Basis-Kernel | Uhr wäre auch nach erstem Boot weitgehend blind |
