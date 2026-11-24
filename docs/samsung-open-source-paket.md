@@ -35,27 +35,44 @@ Device Trees liegen unter `arch/arm64/boot/dts/exynos/`, Familien (Zuordnung zu 
 - `exynos9110-tizen_pulse-r01/-r02/-r03` und `…pulse_lte-r00`, Modell `PULSE` (laut Nutzer: Galaxy Watch Active), Speicher im DT: 768 MB (0x30000000).
 - `renaissance`, `maestro`, `smdk` – weitere Boards/Referenzen.
 
-## Welches Board ist die SM-R840?
+## Welches Board ist die SM-R840? — **Jetzt von der echten Uhr bestätigt (25.11.2026)**
 
-**Angabe des Nutzers (24.11.2026, nicht aus dem Paket belegt):** Noblesse = Galaxy Watch3 (SM-R840 / R845 / R850) · Pulse = Galaxy Watch Active (SM-R500) ·
-Renaissance = Galaxy Watch Active2 (SM-R820 / R830) · Galileo = erste Galaxy Watch (SM-R800 / R810). Im Paket selbst steht in keiner DTS-, Kconfig- oder Textdatei
-„R840“ oder „R850“ (per Suche geprüft). Meine frühere Vermutung „PULSE“ war **falsch** – sie wird verworfen.
+Über Samsungs offiziellen Tizen-Entwicklermodus (`sdb shell`, PC des Nutzers, WLAN-Debugging, NICHT Bootloader-Unlock) **von der laufenden
+Uhr selbst** ausgelesen, nur lesend:
 
-Damit kommt für die R840 die Familie **`noblesse`** in Frage. Offen bleibt die genaue Variante und Revision:
-- R840 = 45 mm Bluetooth → vermutlich `noblesse_large_bt` (im Paket **r02, r05, r08**); R850 = 41 mm → `noblesse_small_bt` (r02, r05); R845 = LTE → `noblesse_large_lte`.
-- Welche Revision in deiner Uhr steckt, ist **nicht bekannt**.
-- Auffällig: Der Speicher im `noblesse_large_bt`-DT ist 0x60000000 = **1,5 GB**, nicht 1 GB. Das passt nicht zu den 1 GB aus dem Auftrag. Ob die Angabe oder der DT abweicht (oder Samsung unterschiedliche Speicherbestückungen führt), ist ungeklärt.
+```
+/proc/device-tree/model     → NOBLESSE-LARGE-BT
+/proc/device-tree/compatible → samsung,exynos9110
+uname -r                    → 4.9.59  (identisch zur Version in diesem Paket)
+/proc/cmdline                → ... model=SM-R840 boot_ver=FT55_R840XXU1ATG3 hw_rev=08 ...
+                                tizenboot.dram_info=...,1G ... tizenboot.verified_kern=1
+/etc/info.ini                → Build=FT55_R840XXU1ATG3, Type=eng
+MemTotal                     → 973860 kB
+```
 
-Bauteile im DT `exynos9110-tizen_noblesse_large_bt-r08` (das ist Beschreibung, kein Funktionsbeweis): Touch **Zinitix ZTM620**, AMOLED-Panel **S6E36W4X01** (Hersteller SDC/BOE),
-**BCM4775** (GPS/Sensorhub, „ssp“), **BCM43013** (WLAN/BT), Barometer **LPS22HB**, NFC, Audio-Codec **COD9005X**, PMIC **S2MPW02**, Haptik **ztm620_motor**,
-Drehkranz **tizen_detent**, drei Thermistoren. Das sind genau die Bauteile, deren Treiber im 4.19-Baum fehlen.
+Damit ist geklärt, was vorher nur Vermutung war:
+- **Board: `noblesse_large_bt`**, genau wie vom Nutzer angegeben – bestätigt, nicht mehr nur Zuordnung.
+- **Revision: `hw_rev=08` → `exynos9110-tizen_noblesse_large_bt-r08.dtb`** ist die richtige der drei gebauten (r02/r05/r08).
+- **Kernel-Version 4.9.59 stimmt exakt** mit dem in diesem Paket überein – unsere Kernel-2-Basis (`kernel-build.md`) ist also nicht nur
+  „passend gewählt“, sondern **dieselbe Version, die auf der Uhr läuft**.
+- **`tizenboot.verified_kern=1`**: Verified/Secure Boot ist aktiv und prüft den Kernel beim Start. Bestätigt weiterhin die Einschätzung
+  „NOT SAFE TO PROCEED“ für jeden Versuch, einen eigenen Kernel zu booten – daran ändert der Root-Zugriff im Userspace nichts.
+- **1 GB RAM bestätigt** (973 MB nutzbar) – der Auftrag hatte recht, nicht der 1,5-GB-Eintrag im `noblesse_large_bt`-DT. Warum der DT 1,5 GB
+  reserviert, bleibt offen (evtl. Reservierung ungenutzt, oder andere Speicherbestückung bei anderen Noblesse-Varianten).
+- **`Type=eng`** in `/etc/info.ini`: Diese konkrete Firmware ist eine **Engineering-/Debug-Variante** (nicht die normale Endkunden-„user“-Firmware).
+  Das erklärt plausibel, warum der Tizen-Entwicklermodus ohne Weiteres root-Zugriff per `sdb shell` gewährt.
 
-Zur **Absicherung** ohne Schreiben (braucht deine Freigabe): die Modellzeile aus der Stock-Firmware (`R840XXU1DWK2`, AP-Datei → `boot.img`/DTB) lesen,
-oder von der laufenden Uhr nur `/proc/device-tree/model` lesen (per `sdb`, Entwicklermodus). Beides liefert Board **und** Revision.
+Bauteile im DT `exynos9110-tizen_noblesse_large_bt-r08` (Beschreibung aus dem Quellpaket, kein Funktionsbeweis am Gerät): Touch **Zinitix ZTM620**,
+AMOLED-Panel **S6E36W4X01** (Hersteller SDC/BOE), **BCM4775** (GPS/Sensorhub, „ssp“), **BCM43013** (WLAN/BT), Barometer **LPS22HB**, NFC,
+Audio-Codec **COD9005X**, PMIC **S2MPW02**, Haptik **ztm620_motor**, Drehkranz **tizen_detent**, drei Thermistoren. Das sind genau die Bauteile,
+deren Treiber im 4.19-Baum fehlen und die im 4.9er-Samsung-Baum liegen (siehe `treiber-vergleich-samsung49.md`).
 
 ## Folgen für das Projekt
 
-- Kernel-Basis überdenken: Der Tizen-Kernel 4.9.59 passt zum Tizen-Userland und zu den DTS; unsere 4.19-Basis passt zu Wear OS und zum R800-Projekt. Entscheidung offen.
-- Die Treiber für Dinge, die im 4.19-Baum fehlen (WLAN, Bluetooth, GPS/Sensoren, Haptik, Bezel), könnten hier vorhanden sein.
-  Das R800-Projekt hat sie genau aus „Samsungs Tizen-Quellen“ (R80X-Tizen-Kernel) übernommen. **Noch nicht geprüft.**
+- **Kernel-Basis entschieden**: Kernel 2 (Samsung 4.9.59, Board `noblesse_large_bt`, DTB-Revision **r08**) ist die richtige Basis – bestätigt
+  durch die laufende Uhr, nicht nur durch Dateinamen. Kernel 1 (Google 4.19, ERD9110) bleibt als erster Gehversuch im Repo, ist aber für die
+  R840 die falsche Plattform.
+- Sensorhub/GPS, Haptik und Drehkranz sind im 4.9er-Baum vorhanden (siehe `treiber-vergleich-samsung49.md`); WLAN fehlt in beiden Bäumen.
 - Lizenz: Linux ist GPL-2.0. Die RPMs und andere Pakete haben eigene Lizenzen; Samsung-eigene Binärteile sind nicht Teil unseres Repos.
+- Root-Zugriff per `sdb` (offizieller Tizen-Entwicklermodus, Engineering-Firmware) ändert an der Boot-Sicherheitslage nichts: `verified_kern=1`
+  bleibt aktiv, ein eigener Kernel würde beim Booten weiterhin die Signaturprüfung durchlaufen müssen. **Weiterhin: kein Flash, kein Boot-Versuch.**

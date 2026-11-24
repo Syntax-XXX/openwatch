@@ -67,8 +67,8 @@ und Drehkranz-Treiber (siehe `treiber-vergleich-samsung49.md`).
 | `exynos9110-tizen_noblesse_large_bt-r08.dtb` | 141 KB | `ed1fffbb3b1b6ed6cc3614d392cd99f1fa64354ca9fe4758b6a75b6436217f11` |
 
 - **Version:** `4.9.59-openwatch-r840`, Compiler Debian GCC 14.2.0 (aarch64-linux-gnu-gcc, nicht Clang – Samsungs 4.9-Baum ist mit GCC geprüft).
-- **Alle drei Revisionen** (R02/R05/R08) des `noblesse_large_bt`-Boards wurden gebaut, da unbekannt ist, welche Revision in der
-  SM-R840 des Nutzers steckt (siehe `samsung-open-source-paket.md`, Abschnitt „Welches Board ist die SM-R840“).
+- **Alle drei Revisionen** (R02/R05/R08) des `noblesse_large_bt`-Boards wurden vorsorglich gebaut; über die laufende Uhr per `sdb` ist jetzt
+  bestätigt (siehe `samsung-open-source-paket.md`): **r08** (`hw_rev=08`) ist die richtige.
 - **Basis-Defconfig:** `tizen_noblesse_defconfig` (4144 Zeilen, volle Noblesse-Familie) + `tizen_noblesse_large_defconfig`
   (Panel-Auswahl RM69091) + unser `kernel/configs/sm-r840.fragment`.
 
@@ -99,7 +99,7 @@ proprietäre Binärdatei).
 ## Was damit nicht gezeigt ist (Kernel 2, 4.9)
 
 - Kein Boot, keine Aussage zu Touch, Display, Sensoren, Haptik oder Drehkranz auf echter Hardware.
-- Welche der drei DTB-Revisionen (R02/R05/R08) zur echten Uhr passt, ist unbekannt (siehe `samsung-open-source-paket.md`).
+- Welche DTB-Revision zur echten Uhr passt, ist inzwischen bekannt: **r08** (siehe `samsung-open-source-paket.md`).
 - `CONFIG_UH`/RKP ist aus – das ist Samsungs Sicherheits-/Signierungsschicht. Ein Kernel ohne sie würde auf echter Hardware vom
   Bootloader ohnehin nicht als vertrauenswürdig akzeptiert; das ist für unser reines Kompilier-Ziel ohne Bedeutung.
 - Kein Vergleich der Boot-Reihenfolge/Initcalls zwischen 4.19- und 4.9-Kernel durchgeführt.
