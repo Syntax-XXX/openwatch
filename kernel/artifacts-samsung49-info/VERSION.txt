@@ -1,0 +1,4 @@
+release: 4.9.59-openwatch-r840
+quelle:  Samsung SM-R845U_Opensource.zip, linux-4.9-exynos9110
+aarch64-linux-gnu-gcc (Debian 14.2.0-19) 14.2.0
+gebaut:  2026-11-24 20:52:07 UTC

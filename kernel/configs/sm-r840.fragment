@@ -35,3 +35,19 @@ CONFIG_EXYNOS_CPUPM=y
 # Weniger Ballast fürs erste Bauen und für den knappen RAM
 # CONFIG_DEBUG_INFO is not set
 # CONFIG_MODULE_SIG is not set
+# Samsungs proprietärer Hypervisor "uH"/RKP (init/_uh.S bindet die fehlende Binärdatei init/uh.elf ein,
+# die nicht im GPL-Quellpaket enthalten ist). UH_RKP "select"-t UH, deshalb müssen alle vier Optionen aus.
+# Nur relevant für echte Hardware/Signierung – fürs reine Kompilieren aus; keine funktionale Einbuße
+# für unsere Zwecke (kein Flash, kein Boot).
+# CONFIG_UH is not set
+# CONFIG_UH_DEBUG is not set
+# CONFIG_UH_RKP is not set
+# CONFIG_UH_RKP_6G is not set
+# CONFIG_UH_INFORM is not set
+# CONFIG_NOBLESSE_LARGE schaltet drivers/sensors/lps22hb_noblesse/ (Barometer) ein, das sensors_register()
+# aus sensors_core.c braucht; die Basis-defconfig lässt SENSORS_CORE aber aus (Linkfehler).
+CONFIG_SENSORS_CORE=y
+# Das übergeordnete Board-Flag: ohne CONFIG_NOBLESSE=y (nur NOBLESSE_LARGE war gesetzt) greift in
+# arch/arm64/boot/dts/exynos/Makefile der generische "sonst"-Zweig und baut die kaputten
+# Referenzboards smdk9110/maestro9110 statt unserer exynos9110-tizen_noblesse_large_bt-*.dtb.
+CONFIG_NOBLESSE=y

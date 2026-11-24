@@ -33,12 +33,25 @@ Hardware laut Auftrag: Exynos 9110 (2× Cortex-A53), 1 GB RAM, 360×360 AMOLED, 
 | Tasten, Mikrofon, Lautsprecher, NFC | nicht ausgewertet | nein | – | nein | |
 | Thermik/Taktskalierung | `CPU_FREQ` ja; `EXYNOS_THERMAL` nicht im Baum | teilweise | Temperatur **simuliert** | nein | |
 
-## Die fehlenden Treiber
+## Die fehlenden Treiber (nur Kernel 1, 4.19 Google-Basis)
 
-Die fünf fett markierten Gruppen stammen im R800-Projekt aus **Samsungs Tizen-Quellen für die R800** und sind im Googles Basis-Baum nicht enthalten.
-Sie werden **nicht nachgebaut oder erfunden**. Die zugehörigen Optionen bleiben aus. Samsungs Open-Source-Paket für die R840
-(`SM-R845U_Opensource.zip`) ist inzwischen beschafft und enthält Samsungs **Linux 4.9.59** mit vielen echten Device Trees (siehe
-`samsung-open-source-paket.md`). Welches Board die R840 ist, ist **nicht belegt**; die Treiber darin sind **noch nicht ausgewertet**.
+Die Tabelle oben gilt für **Kernel 1** (4.19.279, Googles Wear-Zweig, ERD9110-Referenz-DT – nicht der R840). Die fünf fett markierten
+Gruppen fehlen dort komplett.
+
+**Kernel 2** (4.9.59, Samsungs eigener GPL-Kernel aus `SM-R845U_Opensource.zip`, siehe `kernel-build.md` und `samsung-open-source-paket.md`)
+ist ein anderer Stand: er bringt den **echten Noblesse-Large-BT-Device-Tree** mit (Watch3-Familie laut Nutzerangabe, drei Revisionen
+R02/R05/R08 – welche genau zur Uhr des Nutzers passt, ist offen) und schließt davon drei der fünf Lücken, siehe `treiber-vergleich-samsung49.md`
+für den Treiber-für-Treiber-Vergleich:
+
+| Gruppe | Kernel 1 (4.19) | Kernel 2 (4.9, Samsung) |
+|---|---|---|
+| Sensorhub/GPS (Schritte, Puls, Lage) | fehlt | **vorhanden** (`drivers/sensorhub/brcm_noblesse/`) |
+| Haptik (Motor) | fehlt | **vorhanden** |
+| Drehkranz (Bezel) | fehlt | **vorhanden** |
+| WLAN (Broadcom) | fehlt | **fehlt weiterhin** (auch in Samsungs eigenem GPL-Paket nicht enthalten – vermutlich closed-source/binär ausgeliefert) |
+| Bluetooth | fehlt | nicht ausgewertet |
+
+Nichts davon wird nachgebaut oder erfunden; wo kein Treiber im jeweiligen Baum liegt, bleibt die Option aus.
 
 ## Der Teil, der wirklich emuliert ist
 
