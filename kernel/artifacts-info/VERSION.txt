@@ -1,0 +1,4 @@
+release: 4.19.279-openwatch-r840
+basis:   Kernel-Basis: a6bd35aa71f4ef679c997c553ea0df750fe8b7ba
+Debian clang version 19.1.7 (3+b1)
+gebaut:  2026-11-24 17:03:19 UTC
