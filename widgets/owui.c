@@ -259,3 +259,18 @@ void ow_fisheye(double y_center, double *scale, double *alpha) {
     double d = fabs(y_center - OW_H / 2.0), t = (d - 40.0) / 130.0; t = t < 0 ? 0 : t > 1 ? 1 : t;
     *scale = 1.0 - 0.28 * t * t; *alpha = 1.0 - 0.85 * t * t;
 }
+
+/* Umbruch auf höchstens max_lines Zeilen (Wortgrenzen); letzte Zeile wird mit ".." gekürzt. Liefert die Zahl der gezeichneten Zeilen. */
+int ow_text_wrap(cairo_t *cr, const char *s, double x, double y, double maxw, double size, double line_h, int max_lines, OwColor c) {
+    font(cr, size, false);
+    char buf[256]; snprintf(buf, sizeof buf, "%s", s); char *p = buf; int lines = 0;
+    while (*p && lines < max_lines) {
+        char line[256]; size_t len = strlen(p), cut = len; cairo_text_extents_t e;
+        for (;;) { memcpy(line, p, cut); line[cut] = 0; cairo_text_extents(cr, line, &e); if (e.width <= maxw || cut <= 1) break;
+                   size_t k = cut - 1; while (k > 0 && p[k] != ' ') k--; cut = k > 0 ? k : cut - 1; }
+        bool last = (lines == max_lines - 1) && cut < len;
+        if (last) ow_text_fit(cr, p, x, y + lines * line_h, maxw, size, c, -1, false); else ow_text(cr, line, x, y + lines * line_h, size, c, -1, false);
+        p += cut; while (*p == ' ') p++; lines++;
+    }
+    return lines;
+}

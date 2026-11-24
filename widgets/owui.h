@@ -76,6 +76,7 @@ void ow_status_dots(cairo_t *cr, int count, int active, double cy);   /* Seiten-
 void ow_title(cairo_t *cr, const char *s);                     /* Seitenkopf oben, rund-sicher */
 double ow_ease(double t);
 void ow_arc_gradient(cairo_t *cr, double cx, double cy, double rad, double width, double from_deg, double to_deg, double frac, OwColor c1, OwColor c2);
+int ow_text_wrap(cairo_t *cr, const char *s, double x, double y, double maxw, double size, double line_h, int max_lines, OwColor c);
 void ow_fisheye(double y_center, double *scale, double *alpha);                                      /* easeInOutCubic 0..1 */
 
 #endif
