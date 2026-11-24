@@ -14,8 +14,8 @@
 #include <libgen.h>
 
 typedef enum { V_FACE, V_QUICK, V_NOTIF, V_CUSTOM } View;
-static const char *face_names[] = { "Digital", "Analog", "Minimal" };
-#define N_FACES 3
+static const char *face_names[] = { "Digital", "Analog", "Minimal", "Noblesse" };
+#define N_FACES 4
 #define N_PAGES 3          /* 0 Aktivität | 1 Zifferblatt | 2 Heute */
 
 typedef struct {
@@ -79,12 +79,29 @@ static void face_analog(cairo_t *cr, const struct tm *t) {
     hand(cr, h * M_PI / 6, 86, 7, OW_FG); hand(cr, m * M_PI / 30, 130, 4.5, OW_FG); hand(cr, s * M_PI / 30, 148, 2, OW_ACCENT);
     cairo_arc(cr, 180, 180, 7, 0, 2 * M_PI); ow_set(cr, OW_ACCENT, 1); cairo_fill(cr);
 }
+/* Viertes Zifferblatt: Ring aus Strichmarken am Rand (eigenes Design, erinnert an die physische Bezel-Einteilung einer
+ * runden Uhr, ohne Samsung-Grafiken oder -Schriften zu nutzen) + zentrierte Digitalzeit und ein Datums-Chip. */
+static void face_noblesse(cairo_t *cr, const struct tm *t) {
+    char b[32];
+    for (int i = 0; i < 48; i++) {
+        double a = i * M_PI / 24, major = (i % 12 == 0), r1 = major ? 140 : (i % 4 == 0 ? 150 : 158), r2 = 170;
+        cairo_set_line_width(cr, major ? 4.5 : (i % 4 == 0 ? 2.6 : 1.4));
+        ow_set(cr, major ? OW_ACCENT : OW_DIM, major ? 1 : 0.7);
+        cairo_move_to(cr, 180 + sin(a) * r1, 180 - cos(a) * r1); cairo_line_to(cr, 180 + sin(a) * r2, 180 - cos(a) * r2); cairo_stroke(cr);
+    }
+    ow_ring(cr, 180, 180, 128, 3, sh.st.battery / 100.0, OW_GOOD);
+    snprintf(b, sizeof b, "%02d:%02d", t->tm_hour, t->tm_min); ow_text(cr, b, 180, 196, 58, OW_FG, 0, true);
+    snprintf(b, sizeof b, "%s %d.%d.", wd[t->tm_wday], t->tm_mday, t->tm_mon + 1); ow_pill(cr, 180 - 56, 212, 112, 30, OW_CARD, 1);
+    ow_text(cr, b, 180, 232, 14, OW_DIM, 0, false);
+    char hr[8]; snprintf(hr, sizeof hr, "%d", sh.st.heart_rate); ow_icon(cr, "heart", 180, 272, 18, OW_BAD); ow_text(cr, hr, 180, 296, 13, OW_DIM, 0, false);
+}
 static void face_minimal(cairo_t *cr, const struct tm *t) {
     char b[8]; snprintf(b, sizeof b, "%02d", t->tm_hour); ow_text(cr, b, 180, 168, 120, OW_FG, 0, true);
     snprintf(b, sizeof b, "%02d", t->tm_min); ow_text(cr, b, 180, 276, 120, OW_ACCENT, 0, true);
 }
 static void draw_face_style(cairo_t *cr, int style, const struct tm *t) {
-    if (style == 0) face_digital(cr, t); else if (style == 1) face_analog(cr, t); else face_minimal(cr, t);
+    if (style == 0) face_digital(cr, t); else if (style == 1) face_analog(cr, t);
+    else if (style == 2) face_minimal(cr, t); else face_noblesse(cr, t);
 }
 
 /* ---------- Widget-Seiten ---------- */
