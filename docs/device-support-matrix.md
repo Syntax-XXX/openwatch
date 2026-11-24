@@ -53,6 +53,21 @@ für den Treiber-für-Treiber-Vergleich:
 
 Nichts davon wird nachgebaut oder erfunden; wo kein Treiber im jeweiligen Baum liegt, bleibt die Option aus.
 
+## Bestätigung von der echten Uhr (25.11.2026, per `sdb`, nur lesend)
+
+Über Samsungs Tizen-Entwicklermodus (root-Shell, siehe `samsung-open-source-paket.md`) direkt am laufenden Gerät geprüft – kein Flash, keine Änderung:
+
+| Komponente | Beobachtung an der Uhr |
+|---|---|
+| Display | `/sys/class/graphics/fb0/virtual_size` = `360,720` (Doppelpuffer für 360×360), 32 bpp |
+| Sensoren | `/sys/class/sensors/`: `accelerometer_sensor`(×2), `gyro_sensor`, `light_sensor`, `hrm_sensor`, `pressure_sensor`(×2) – passt zum SSP/BCM4775 + LPS22HB aus dem DT |
+| Sensorhub aktiv | `dmesg`: laufende `[SSP]`-Meldungen (`debug_work_func`, `send_instruction`) |
+| Akku/Ladung | `/sys/class/power_supply/`: `battery`, `sec-charger`, `sec-fuelgauge`, `wireless`, `wpc`, `ac`, `usb` – inkl. drahtlosem Laden (p9222-Chip in `dmesg`) |
+| Partitionslayout | `/proc/partitions`: eMMC `mmcblk0` mit 21 Partitionen + `rpmb`/`boot0`/`boot1`, `zram0`, `dm-0` (verschlüsselt/dm-verity) – nur zur Dokumentation, keine Flash-Grundlage |
+
+Diese Zeilen der Tabelle oben (Sensorhub/GPS, Haptik, Drehkranz) sind damit nicht nur „im Samsung-4.9-Kernel vorhanden“, sondern **auf der
+echten Uhr tatsächlich aktiv** – die stärkste bisherige Bestätigung, dass Kernel 2 (4.9.59, `noblesse_large_bt-r08`) die richtige Basis ist.
+
 ## Der Teil, der wirklich emuliert ist
 
 Nur die Oberfläche (`docs/openwatch-shell.md`): Gesten, Panels, Zifferblätter, Apps in Xvfb 360×360, mit simulierten Daten.
