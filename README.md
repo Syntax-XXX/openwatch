@@ -31,3 +31,10 @@ scripts/kernel-fetch.sh && scripts/kernel-build.sh   # Kernel holen und bauen (d
 
 Kein Flashen, keine Umgehung von Signaturprüfungen, kein Ersetzen von `sboot.bin`, keine undokumentierten Werksbefehle, keine
 Samsung-Quelltexte, -Grafiken oder -Schriften im Repo. Unterstützte Hardware wird erst als unterstützt geführt, wenn sie belegt ist.
+
+## Lizenz
+
+GPL-2.0-only. Der eigene OpenWatch-Code (UI, Window-Manager, Shell, Apps, Skripte) steht unter GPL-2.0.
+Die mitgelieferten Kernel-`.config`-Dumps unter `kernel/configs/*.full` sind vom Linux-Kernel abgeleitet
+und ebenfalls GPL-2.0. Es ist **kein** proprietärer Samsung-Quellcode enthalten — nur Prüfsummen,
+Build-Metadaten und selbst erstellte Konfiguration/Dokumentation.

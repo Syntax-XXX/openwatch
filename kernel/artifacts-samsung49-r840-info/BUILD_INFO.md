@@ -9,7 +9,7 @@
 | Build-Datum | 20261125-071845 (lokale Zeit) |
 | Cross-Compiler | `aarch64-linux-gnu-gcc` (Debian GCC 14.2.0), via ccache |
 | Host-Compiler | GCC 14, `HOSTCFLAGS="-O2 -fcommon"` |
-| Build-Host | Debian-13-VM (10.0.32.220), `make -j2` (5 GB RAM) |
+| Build-Host | Debian-13-VM (4 vCPU, 5 GB RAM), `make -j2` |
 
 ## Build-Flags
 

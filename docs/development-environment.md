@@ -9,9 +9,9 @@
 | Proxmox | pve2, **VM 220 `openwatch-dev`** (neu angelegt; bestehende VMs/Container wurden nicht angefasst) |
 | System | Debian 13 (trixie) **amd64**, Cloud-Image, Kernel/Userland nativ x86 |
 | Ressourcen | 4 vCPU (`cpu: host`), 5 GB RAM (Ballon ab 3 GB), 48 GB Disk (local-lvm, discard an) |
-| Netz | 10.0.32.220/16, Gateway 10.0.0.1, DNS 10.0.32.108; SSH: `ssh elias@10.0.32.220` (Schlüssel von pve2) |
+| Netz | internes LAN, feste IP; SSH per Schlüssel vom Proxmox-Host (`ssh <user>@<dev-vm>`) |
 | Start | `onboot: 0` – die VM startet nicht von selbst; `qm start 220` |
-| Paket-Cache | apt über `10.0.32.69:3142` (apt-cacher-ng auf pve2) |
+| Paket-Cache | apt über lokalen apt-cacher-ng auf dem Proxmox-Host |
 
 **Warum x86 statt ARM64-VM:** pve2 ist eine x86-Maschine (Ryzen 5 PRO 2400G) und kann ARM64 nicht nativ virtualisieren.
 Wie im Auftrag vorgesehen: x86-VM mit AArch64-Cross-Toolchain, QEMU für ARM64 (`qemu-system-aarch64`, `qemu-aarch64-static`).
