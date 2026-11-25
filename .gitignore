@@ -4,3 +4,4 @@ kernel/out/
 *.o
 *.a
 __pycache__/
+original-r840-dump-*/
